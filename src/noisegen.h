@@ -20,6 +20,8 @@
 static const char* usage[] = {
   "Usage: noisegen [OPTIONS] NOISE",
   "",
+  "Noise: One of \"brown\" or \"white\".",
+  "",
   "Options:",
   "  -d INT    Duration of the noise in seconds (>0). Defaults to " STR(
     DUR_DEFAULT) ".",
@@ -30,10 +32,8 @@ static const char* usage[] = {
   "  -c FLOAT  Filter coefficient for the brown noise generator (0-1).",
   "            Defaults to " STR(BN_COEF_DEFAULT) ".",
   "  -o FILE   File to store the resulting noise in or \"-\" for the",
-  "            output. Defaults to " STR(OUT_DEFAULT) ".",
+  "            standard output. Defaults to " STR(OUT_DEFAULT) ".",
   "  -h        Show this message and exit.",
-  "",
-  "Noise: One of 'brown' or 'white'.",
   NULL,
 };
 

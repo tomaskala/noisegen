@@ -14,9 +14,9 @@ Noise: One of "brown" or "white".
 
 Options:
 -d INT    Duration of the noise in seconds (>0).
--v INT    Noise volume (0-100).
+-v INT    Noise volume [0-100].
 -k INT    Moving average kernel size, used to smoothen the noise. Set to 1 to
-          disable smoothing.
+          disable smoothing (>0).
 -c FLOAT  Filter coefficient for the brown noise generator (0-1).
 -o FILE   File to store the resulting noise in or "-" for the standard output.
 ```

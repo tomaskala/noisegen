@@ -141,7 +141,7 @@ main(int argc, char** argv)
           die("invalid argument: %s", optarg);
         }
 
-        assert(dur >= 0);
+        assert(dur > 0);
         break;
       case 'v':
         errno = 0;
@@ -161,7 +161,7 @@ main(int argc, char** argv)
           die("invalid argument: %s", optarg);
         }
 
-        assert(k_size >= 1);
+        assert(k_size > 0);
         break;
       case 'c':
         errno = 0;

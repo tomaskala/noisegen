@@ -25,9 +25,9 @@ static const char* usage[] = {
   "Options:",
   "  -d INT    Duration of the noise in seconds (>0). Defaults to " STR(
     DUR_DEFAULT) ".",
-  "  -v INT    Noise volume (0-100). Defaults to " STR(VOL_DEFAULT) ".",
+  "  -v INT    Noise volume [0-100]. Defaults to " STR(VOL_DEFAULT) ".",
   "  -k INT    Moving average kernel size, used to smoothen the noise.",
-  "            Set to 1 to disable smoothing. Defaults to " STR(
+  "            Set to 1 to disable smoothing (>0). Defaults to " STR(
     KERNEL_DEFAULT) ".",
   "  -c FLOAT  Filter coefficient for the brown noise generator (0-1).",
   "            Defaults to " STR(BN_COEF_DEFAULT) ".",

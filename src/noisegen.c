@@ -31,17 +31,13 @@ init_kernel(struct cbuffer* kernel, gen_t gen, struct noise_params* params)
 {
   size_t i;
   double sample, sample_sum = 0.0;
-
   for (i = 0; i < kernel->cap; ++i) {
     sample = gen(*params);
     params->prev = sample;
     sample_sum += sample;
-
-    if (cb_push(kernel, sample)) {
+    if (cb_push(kernel, sample))
       die("fill cb_push");
-    }
   }
-
   return sample_sum / kernel->cap;
 }
 
@@ -60,9 +56,8 @@ gen_noise(gen_t gen,
   struct cbuffer* kernel[N_CHANNELS];
   FILE* f = stdout;
 
-  if ((unsigned long)dur > SIZE_MAX / SAMPLE_RATE) {
+  if ((unsigned long)dur > SIZE_MAX / SAMPLE_RATE)
     die("duration too large, overflow");
-  }
 
   n_samples = dur * SAMPLE_RATE;
 
@@ -74,9 +69,8 @@ gen_noise(gen_t gen,
     sample_avg[c] = init_kernel(kernel[c], gen, &params[c]);
   }
 
-  if (strcmp(out, "-") && !(f = fopen(out, "wb"))) {
+  if (strcmp(out, "-") && !(f = fopen(out, "wb")))
     die("fopen %s: %s", out, strerror(errno));
-  }
 
   write_wav_header(f, n_samples);
 
@@ -86,29 +80,24 @@ gen_noise(gen_t gen,
         sample_new = gen(params[c]);
         params[c].prev = sample_new;
 
-        if (cb_poll(kernel[c], &sample_old) == -1) {
+        if (cb_poll(kernel[c], &sample_old) == -1)
           die("cb_poll");
-        }
-
-        if (cb_push(kernel[c], sample_new) == -1) {
+        if (cb_push(kernel[c], sample_new) == -1)
           die("cb_push");
-        }
 
         sample_avg[c] += (sample_new - sample_old) / k_size;
         buffer[b] = (int16_t)(sample_avg[c] * INT16_MAX);
       }
     }
 
-    if (fwrite(&buffer, sizeof(int16_t), b, f) != b) {
+    if (fwrite(&buffer, sizeof(int16_t), b, f) != b)
       die("fwrite: wav data");
-    }
 
     items_written += b;
   }
 
-  if (strcmp(out, "-") && fclose(f)) {
+  if (strcmp(out, "-") && fclose(f))
     die("fclose %s: %s", out, strerror(errno));
-  }
 
   for (c = 0; c < N_CHANNELS; ++c) {
     cb_free(kernel[c]);
@@ -136,41 +125,29 @@ main(int argc, char** argv)
       case 'd':
         errno = 0;
         dur = strtol(optarg, &p, 10);
-
-        if (errno || *p) {
+        if (errno || *p)
           die("invalid argument: %s", optarg);
-        }
-
         assert(dur > 0);
         break;
       case 'v':
         errno = 0;
         vol = strtol(optarg, &p, 10);
-
-        if (errno || *p) {
+        if (errno || *p)
           die("invalid argument: %s", optarg);
-        }
-
         assert(0 <= vol && vol <= 100);
         break;
       case 'k':
         errno = 0;
         k_size = strtol(optarg, &p, 10);
-
-        if (errno || *p) {
+        if (errno || *p)
           die("invalid argument: %s", optarg);
-        }
-
         assert(k_size > 0);
         break;
       case 'c':
         errno = 0;
         bn_coef = strtod(optarg, &p);
-
-        if (errno || *p) {
+        if (errno || *p)
           die("invalid argument: %s", optarg);
-        }
-
         assert(0.0 < bn_coef && bn_coef < 1.0);
         break;
       case 'o':
@@ -182,19 +159,17 @@ main(int argc, char** argv)
     }
   }
 
-  if (optind == argc) {
+  if (optind == argc)
     die("missing noise type");
-  }
 
   noise = argv[optind];
 
-  if (strcmp(noise, "white") == 0) {
+  if (strcmp(noise, "white") == 0)
     gen = &gen_wn;
-  } else if (strcmp(noise, "brown") == 0) {
+  else if (strcmp(noise, "brown") == 0)
     gen = &gen_bn;
-  } else {
+  else
     die("unrecognized noise type: %s", noise);
-  }
 
   rand_seed(12345);
   gen_noise(gen, dur, vol, k_size, bn_coef, out);

@@ -9,11 +9,8 @@ void*
 alloc(size_t size)
 {
   void* p;
-
-  if (!(p = malloc(size))) {
+  if (!(p = malloc(size)))
     die("malloc:");
-  }
-
   return p;
 }
 
@@ -29,9 +26,8 @@ die(const char* fmt, ...)
   if (fmt[0] && fmt[strlen(fmt) - 1] == ':') {
     fputc(' ', stderr);
     perror(NULL);
-  } else {
+  } else
     fputc('\n', stderr);
-  }
 
   exit(EXIT_FAILURE);
 }
@@ -83,7 +79,6 @@ write_wav_header(FILE* f, int n_samples)
   header.subchunk2_id[3] = 'a';
   header.subchunk2_size = subchunk2_size;
 
-  if (fwrite(&header, sizeof(struct wav_header), 1, f) != 1) {
+  if (fwrite(&header, sizeof(struct wav_header), 1, f) != 1)
     die("fwrite: wav header");
-  }
 }

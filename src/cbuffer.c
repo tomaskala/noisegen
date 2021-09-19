@@ -25,10 +25,8 @@ cb_free(struct cbuffer* cb)
 int
 cb_push(struct cbuffer* cb, double item)
 {
-  if (cb->cap == cb->items_avail) {
+  if (cb->cap == cb->items_avail)
     return -1;
-  }
-
   cb->buffer[cb->write_ptr % cb->cap] = item;
   cb->write_ptr = (cb->write_ptr + 1) % cb->cap;
   cb->items_avail++;
@@ -38,10 +36,8 @@ cb_push(struct cbuffer* cb, double item)
 int
 cb_poll(struct cbuffer* cb, double* out)
 {
-  if (cb->items_avail == 0) {
+  if (cb->items_avail == 0)
     return -1;
-  }
-
   *out = cb->buffer[cb->read_ptr % cb->cap];
   cb->read_ptr = (cb->read_ptr + 1) % cb->cap;
   cb->items_avail--;

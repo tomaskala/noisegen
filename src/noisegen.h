@@ -56,11 +56,6 @@ static double
 init_kernel(struct cbuffer* kernel, gen_t gen, struct noise_params* params);
 
 static void
-gen_noise(gen_t gen,
-          int dur,
-          int vol,
-          size_t k_size,
-          double bn_coef,
-          const char* out);
+gen_noise(gen_t gen, int dur, int vol, size_t k_size, double bn_coef, FILE* f);
 
 #endif

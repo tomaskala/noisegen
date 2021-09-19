@@ -42,19 +42,13 @@ init_kernel(struct cbuffer* kernel, gen_t gen, struct noise_params* params)
 }
 
 static void
-gen_noise(gen_t gen,
-          int dur,
-          int vol,
-          size_t k_size,
-          double bn_coef,
-          const char* out)
+gen_noise(gen_t gen, int dur, int vol, size_t k_size, double bn_coef, FILE* f)
 {
   size_t i, b, c, items_written, n_samples;
   double sample_old, sample_new, sample_avg[N_CHANNELS];
   int16_t buffer[BUF_SIZE];
   struct noise_params params[N_CHANNELS];
   struct cbuffer* kernel[N_CHANNELS];
-  FILE* f = stdout;
 
   if ((unsigned long)dur > SIZE_MAX / SAMPLE_RATE)
     die("duration too large, overflow");
@@ -68,9 +62,6 @@ gen_noise(gen_t gen,
     params[c].vol = vol;
     sample_avg[c] = init_kernel(kernel[c], gen, &params[c]);
   }
-
-  if (strcmp(out, "-") && !(f = fopen(out, "wb")))
-    die("fopen %s: %s", out, strerror(errno));
 
   write_wav_header(f, n_samples);
 
@@ -96,9 +87,6 @@ gen_noise(gen_t gen,
     items_written += b;
   }
 
-  if (strcmp(out, "-") && fclose(f))
-    die("fclose %s: %s", out, strerror(errno));
-
   for (c = 0; c < N_CHANNELS; ++c) {
     cb_free(kernel[c]);
     kernel[c] = NULL;
@@ -116,6 +104,7 @@ main(int argc, char** argv)
   char* p;
   const char *out = OUT_DEFAULT, *noise;
   gen_t gen = NULL;
+  FILE* f = stdout;
 
   while ((option = getopt(argc, argv, "hd:v:k:c:o:")) != -1) {
     switch (option) {
@@ -172,6 +161,14 @@ main(int argc, char** argv)
     die("unrecognized noise type: %s", noise);
 
   rand_seed(12345);
-  gen_noise(gen, dur, vol, k_size, bn_coef, out);
+
+  if (strcmp(out, "-") && !(f = fopen(out, "wb")))
+    die("fopen %s: %s", out, strerror(errno));
+
+  gen_noise(gen, dur, vol, k_size, bn_coef, f);
+
+  if (strcmp(out, "-") && fclose(f))
+    die("fclose %s: %s", out, strerror(errno));
+
   return EXIT_SUCCESS;
 }

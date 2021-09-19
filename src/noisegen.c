@@ -58,7 +58,7 @@ gen_noise(gen_t gen,
   int16_t buffer[BUF_SIZE];
   struct noise_params params[N_CHANNELS];
   struct cbuffer* kernel[N_CHANNELS];
-  FILE* f;
+  FILE* f = stdout;
 
   if ((unsigned long)dur > SIZE_MAX / SAMPLE_RATE) {
     die("duration too large, overflow");
@@ -74,9 +74,7 @@ gen_noise(gen_t gen,
     sample_avg[c] = init_kernel(kernel[c], gen, &params[c]);
   }
 
-  if (strcmp(out, "-") == 0) {
-    f = stdout;
-  } else if (!(f = fopen(out, "wb"))) {
+  if (strcmp(out, "-") && !(f = fopen(out, "wb"))) {
     die("fopen %s: %s", out, strerror(errno));
   }
 
@@ -108,7 +106,7 @@ gen_noise(gen_t gen,
     items_written += b;
   }
 
-  if (strcmp(out, "-") != 0 && fclose(f)) {
+  if (strcmp(out, "-") && fclose(f)) {
     die("fclose %s: %s", out, strerror(errno));
   }
 
@@ -135,7 +133,6 @@ main(int argc, char** argv)
       case 'h':
         multifputs(usage, stdout);
         return EXIT_SUCCESS;
-        break;
       case 'd':
         errno = 0;
         dur = strtol(optarg, &p, 10);
@@ -182,7 +179,6 @@ main(int argc, char** argv)
       default:
         multifputs(usage, stderr);
         return EXIT_FAILURE;
-        break;
     }
   }
 

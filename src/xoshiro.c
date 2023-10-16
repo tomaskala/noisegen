@@ -5,9 +5,7 @@
 static uint64_t x;
 static uint64_t s[4];
 
-void
-rand_seed(uint64_t seed)
-{
+void rand_seed(uint64_t seed) {
   int i;
   uint64_t z;
   x = seed;
@@ -20,9 +18,7 @@ rand_seed(uint64_t seed)
   }
 }
 
-uint64_t
-rand_int()
-{
+uint64_t rand_int(void) {
   const uint64_t result = rotl(s[1] * 5, 7) * 9;
   const uint64_t t = s[1] << 17;
   s[2] ^= s[0];
@@ -34,9 +30,7 @@ rand_int()
   return result;
 }
 
-double
-rand_dbl()
-{
+double rand_dbl(void) {
   uint64_t x = rand_int();
   return (x >> 11) * (0.5 / ((uint64_t)1 << 52));
 }

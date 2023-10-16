@@ -5,18 +5,16 @@
 
 #include "util.h"
 
-void*
-alloc(size_t size)
-{
-  void* p;
+void *alloc(size_t size) {
+  void *p;
+
   if (!(p = malloc(size)))
     die("malloc:");
+
   return p;
 }
 
-void
-die(const char* fmt, ...)
-{
+void die(const char *fmt, ...) {
   va_list ap;
 
   va_start(ap, fmt);
@@ -32,18 +30,14 @@ die(const char* fmt, ...)
   exit(EXIT_FAILURE);
 }
 
-void
-multifputs(const char** s, FILE* f)
-{
+void multifputs(const char **s, FILE *f) {
   while (*s) {
     fputs(*s++, f);
     fputc('\n', f);
   }
 }
 
-void
-write_wav_header(FILE* f, int n_samples)
-{
+void write_wav_header(FILE *f, int n_samples) {
   /* The wav file standard specifies that if subchunk2_size is odd, the
    * data portion should be padded by a zero byte. We know that the size
    * is even because the sample rate is an even number. */

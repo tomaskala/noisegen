@@ -1,25 +1,20 @@
 #ifndef CBUFFER_H
 #define CBUFFER_H
 
-struct cbuffer
-{
-  double* buffer;
-  size_t cap;
-  size_t read_ptr;
-  size_t write_ptr;
-  size_t items_avail;
+struct cbuffer {
+  double *buffer;
+  int cap;
+  int read_ptr;
+  int write_ptr;
+  int items_avail;
 };
 
-struct cbuffer*
-cb_init(size_t cap);
+void cb_init(struct cbuffer *, int);
 
-void
-cb_free(struct cbuffer* cb);
+void cb_free(struct cbuffer *);
 
-int
-cb_push(struct cbuffer* cb, double item);
+int cb_push(struct cbuffer *, double);
 
-int
-cb_poll(struct cbuffer* cb, double* out);
+int cb_poll(struct cbuffer *, double *);
 
 #endif

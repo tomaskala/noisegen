@@ -11,8 +11,7 @@
 #define BYTES_PER_SAMPLE 2
 #define BITS_PER_SAMPLE (BYTES_PER_SAMPLE * 8)
 
-struct wav_header
-{
+struct wav_header {
   char chunk_id[4];
   int32_t chunk_size;
   char fmt[4];
@@ -30,16 +29,12 @@ struct wav_header
   int32_t subchunk2_size;
 };
 
-void*
-alloc(size_t size);
+void *alloc(size_t);
 
-void
-die(const char* fmt, ...);
+void die(const char *, ...);
 
-void
-multifputs(const char** s, FILE* f);
+void multifputs(const char **, FILE *);
 
-void
-write_wav_header(FILE* f, int n_samples);
+void write_wav_header(FILE *, int);
 
 #endif
